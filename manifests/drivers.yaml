@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nvidia-driver-installer
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: nvidia-driver-installer
+  namespace: kube-system
+  labels:
+    app: nvidia-driver-installer
+rules:
+- apiGroups:      ['extensions']
+  resources:      ['podsecuritypolicies']
+  verbs:          ['use']
+  resourceNames:  ['privileged']
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: nvidia-driver-installer
+  namespace: kube-system
+  labels:
+    app: nvidia-driver-installer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nvidia-driver-installer
+subjects:
+- kind: ServiceAccount
+  name: nvidia-driver-installer
+  namespace: kube-system
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: nvidia-driver-installer
+  namespace: kube-system
+  labels:
+    app: nvidia-driver-installer
+spec:
+  template:
+    metadata:
+      labels:
+        app: nvidia-driver-installer
+    spec:
+      serviceAccount: nvidia-driver-installer
+      serviceAccountName: nvidia-driver-installer
+      tolerations:
+      - key: "nvidia.com/gpu"
+        effect: "NoSchedule"
+        operator: "Exists"
+      hostNetwork: true
+      hostPID: true
+      volumes:
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: nvidia-install-dir-host
+        hostPath:
+          path: /opt/nvidia
+      - name: root-mount
+        hostPath:
+          path: /
+      initContainers:
+      - image: quay.io/giantswarm/coreos-nvidia-driver-installer:1.0.0
+        name: nvidia-driver-installer
+        resources:
+          requests:
+            cpu: 0.15
+        securityContext:
+          privileged: true
+        env:
+          - name: NVIDIA_INSTALL_DIR_HOST
+            value: /opt/nvidia
+          - name: NVIDIA_INSTALL_DIR_CONTAINER
+            value: /usr/local/nvidia
+          - name: ROOT_MOUNT_DIR
+            value: /root
+        volumeMounts:
+        - name: nvidia-install-dir-host
+          mountPath: /usr/local/nvidia
+        - name: dev
+          mountPath: /dev
+        - name: root-mount
+          mountPath: /root
+      containers:
+      - image: gcr.io/google-containers/pause:2.0
+        name: pause
