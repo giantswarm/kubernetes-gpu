@@ -13,7 +13,7 @@ metadata:
   labels:
     app: nvidia-driver-installer
 rules:
-- apiGroups:      ['extensions']
+- apiGroups:      ['policy','extensions']
   resources:      ['podsecuritypolicies']
   verbs:          ['use']
   resourceNames:  ['privileged']
@@ -34,7 +34,7 @@ subjects:
   name: nvidia-driver-installer
   namespace: kube-system
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: nvidia-driver-installer
@@ -42,6 +42,9 @@ metadata:
   labels:
     app: nvidia-driver-installer
 spec:
+  selector:
+    matchLabels:
+      app: nvidia-driver-installer
   template:
     metadata:
       labels:
@@ -50,7 +53,7 @@ spec:
       serviceAccount: nvidia-driver-installer
       serviceAccountName: nvidia-driver-installer
       tolerations:
-      - key: "nvidia.com/gpu"
+      - key: "node.kubernetes.io/master"
         effect: "NoSchedule"
         operator: "Exists"
       hostNetwork: true
@@ -66,7 +69,8 @@ spec:
         hostPath:
           path: /
       initContainers:
-      - image: quay.io/giantswarm/coreos-nvidia-driver-installer:1.0.0
+      - image: quay.io/giantswarm/coreos-nvidia-driver-installer:1.1.0
+        imagePullPolicy: Always
         name: nvidia-driver-installer
         resources:
           requests:
