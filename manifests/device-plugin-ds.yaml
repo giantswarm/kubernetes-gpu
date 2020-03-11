@@ -43,8 +43,6 @@ metadata:
     k8s-app: nvidia-gpu-device-plugin
     addonmanager.kubernetes.io/mode: Reconcile
 spec:
-  updateStrategy:
-    type: RollingUpdate
   selector:
     matchLabels:
       k8s-app: nvidia-gpu-device-plugin
@@ -52,15 +50,9 @@ spec:
     metadata:
       labels:
         k8s-app: nvidia-gpu-device-plugin
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
       serviceAccount: nvidia-gpu-device-plugin
       serviceAccountName: nvidia-gpu-device-plugin
-      tolerations:
-      - key: "node.kubernetes.io/master"
-        effect: "NoSchedule"
-        operator: "Exists"
       priorityClassName: system-node-critical
       volumes:
       - name: device-plugin
@@ -70,16 +62,9 @@ spec:
         hostPath:
           path: /dev
       containers:
-      - image: "k8s.gcr.io/nvidia-gpu-device-plugin@sha256:d18b678437fedc4ec4211c20b3e5469a137a44f989da43dc275e4f2678170db4"
+      - image: "k8s.gcr.io/nvidia-gpu-device-plugin@sha256:4b036e8844920336fa48f36edeb7d4398f426d6a934ba022848deed2edbf09aa"
         command: ["/usr/bin/nvidia-gpu-device-plugin", "-logtostderr"]
         name: nvidia-gpu-device-plugin
-        resources:
-          requests:
-            cpu: 50m
-            memory: 10Mi
-          limits:
-            cpu: 50m
-            memory: 10Mi
         securityContext:
           privileged: true
         volumeMounts:
@@ -87,3 +72,5 @@ spec:
           mountPath: /device-plugin
         - name: dev
           mountPath: /dev
+  updateStrategy:
+    type: RollingUpdate

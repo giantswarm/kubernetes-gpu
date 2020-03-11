@@ -52,10 +52,6 @@ spec:
     spec:
       serviceAccount: nvidia-driver-installer
       serviceAccountName: nvidia-driver-installer
-      tolerations:
-      - key: "node.kubernetes.io/master"
-        effect: "NoSchedule"
-        operator: "Exists"
       hostNetwork: true
       hostPID: true
       volumes:
@@ -72,12 +68,11 @@ spec:
       - image: quay.io/giantswarm/coreos-nvidia-driver-installer:1.1.0
         imagePullPolicy: Always
         name: nvidia-driver-installer
-        resources:
-          requests:
-            cpu: 0.15
         securityContext:
           privileged: true
         env:
+          - name: NVIDIA_DRIVER_VERSION
+            value: "440.64"
           - name: NVIDIA_INSTALL_DIR_HOST
             value: /opt/nvidia
           - name: NVIDIA_INSTALL_DIR_CONTAINER
