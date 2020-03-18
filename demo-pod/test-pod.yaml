@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cuda-vector-add
+spec:
+  restartPolicy: OnFailure
+  containers:
+    - name: cuda-vector-add
+      image: "quay.io/giantswarm/nvidia-gpu-demo:latest"
+      resources:
+        limits:
+          nvidia.com/gpu: 1

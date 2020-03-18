@@ -1,0 +1,8 @@
+FROM quay.io/giantswarm/nvidia-gpu-toolkit
+
+ADD ./Makefile /Makefile
+ADD ./vecadd.cu /vecadd.cu
+
+RUN make
+
+CMD /vecadd
