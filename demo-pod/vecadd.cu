@@ -8,7 +8,7 @@ int *c, *c2;  // results
 __global__ void vecAdd(int *A,int *B,int *C,int N)
 {
    int i = blockIdx.x * blockDim.x + threadIdx.x;
-   C[i] = A[i] + B[i]; 
+   C[i] = A[i] + B[i];
 }
 
 void vecAdd_h(int *A1,int *B1, int *C1, int N)
@@ -22,7 +22,7 @@ int main(int argc,char **argv)
    printf("Begin \n");
    int n=10000000;
    int nBytes = n*sizeof(int);
-   int block_size, block_no; 
+   int block_size, block_no;
    a = (int *)malloc(nBytes);
    b = (int *)malloc(nBytes);
    c = (int *)malloc(nBytes);

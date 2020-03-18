@@ -75,7 +75,7 @@ If we inspect the logs, we should be able to see something like
 
 ```bash
 $ kubectl  logs -f cuda-vector-add
-Begin 
+Begin
 Allocating device memory on host..
 Copying to device..
 Doing GPU Vector add
