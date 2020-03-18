@@ -6,7 +6,7 @@ spec:
   restartPolicy: OnFailure
   containers:
     - name: cuda-vector-add
-      image: "k8s.gcr.io/cuda-vector-add:v0.1"
+      image: "quay.io/giantswarm/nvidia-gpu-demo:latest"
       resources:
         limits:
           nvidia.com/gpu: 1

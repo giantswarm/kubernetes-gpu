@@ -1,0 +1,8 @@
+FROM ubuntu:18.04
+
+RUN apt update && apt install wget make libxml2 gcc-8 g++-8 -y
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
+RUN wget http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_440.33.01_linux.run
+RUN chmod +x cuda_10.2.89_440.33.01_linux.run \
+    && ./cuda_10.2.89_440.33.01_linux.run --toolkit --silent \
+    && rm cuda_10.2.89_440.33.01_linux.run
