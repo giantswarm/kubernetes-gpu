@@ -65,7 +65,7 @@ ListAndWatch: send devices &ListAndWatchResponse{Devices:[&Device{ID:nvidia0,Hea
 
 # Verification
 
-To run a test we are going to use a [cuda example](https://github.com/kubernetes/kubernetes/tree/v1.7.11/test/images/nvidia-cuda) found in kubernetes repository. It performs a simple vector addition using the device plugin installed before.
+To run a test we are going to use a [cuda vecadd example](https://github.com/giantswarm/kubernetes-gpu/blob/master/demo-pod/vecadd.cu). It performs a simple vector addition using the device plugin installed before.
 
 ```bash
 $ kubectl apply -f https://raw.githubusercontent.com/giantswarm/kubernetes-gpu/master/manifests/test-pod.yaml
@@ -75,12 +75,12 @@ If we inspect the logs, we should be able to see something like
 
 ```bash
 $ kubectl  logs -f cuda-vector-add
-[Vector addition of 50000 elements]
-Copy input data from the host memory to the CUDA device
-CUDA kernel launch with 196 blocks of 256 threads
-Copy output data from the CUDA device to the host memory
-Test PASSED
-Done
+Begin 
+Allocating device memory on host..
+Copying to device..
+Doing GPU Vector add
+Doing CPU Vector add
+10000000 0.000007 0.046845
 ```
 
 Now you have installed successfully all needed to run GPU workloads over your Kubernetes cluster.
