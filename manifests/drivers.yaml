@@ -69,7 +69,7 @@ spec:
         hostPath:
           path: /
       initContainers:
-      - image: quay.io/giantswarm/coreos-nvidia-driver-installer:1.1.0
+      - image: quay.io/brinker211/gpu-test:1.2 
         imagePullPolicy: Always
         name: nvidia-driver-installer
         resources:
