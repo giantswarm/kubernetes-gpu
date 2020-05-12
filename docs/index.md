@@ -25,7 +25,7 @@ It will create a daemon set which will run a bunch of different commands by node
 $ kubectl logs -f $(kubectl get pod -l app="nvidia-driver-installer" --no-headers | head -n 1 | awk '{print $1}') -c nvidia-driver-installer
 ...
 +-----------------------------------------------------------------------------+
-| NVIDIA-SMI 396.26                 Driver Version: 396.26                    |
+| NVIDIA-SMI 390.48                 Driver Version: 390.48                    |
 |-------------------------------+----------------------+----------------------+
 | GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
 | Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |

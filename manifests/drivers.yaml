@@ -69,7 +69,7 @@ spec:
         hostPath:
           path: /
       initContainers:
-      - image: quay.io/giantswarm/coreos-nvidia-driver-installer:1.1.0
+      - image: quay.io/giantswarm/coreos-nvidia-driver-installer:390.48
         imagePullPolicy: Always
         name: nvidia-driver-installer
         resources:
