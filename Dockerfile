@@ -10,21 +10,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 RUN apt-get update && \
-    apt-get install software-properties-common -y
-
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test && \
-    apt-get update && \
     apt-get install -y \
         bc \
         time \
         bison \
         curl \
         flex \
-        gcc-snapshot \
-        gcc-8 \
+        gcc \
         kmod \
         libelf-dev \
         libssl-dev \
@@ -33,8 +28,6 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test && \
         xz-utils \
         && \
     rm -rf /var/lib/apt/lists/* 
-
-RUN ln -sfn /usr/bin/gcc-8 /usr/bin/gcc
 
 COPY entrypoint.sh /entrypoint.sh
 
