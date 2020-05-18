@@ -22,7 +22,7 @@ KERNEL_SRC_URL="https://cdn.kernel.org/pub/linux/kernel/v4.x"
 KERNEL_SRC_ARCHIVE="linux-$(uname -r | cut -d- -f1).tar.xz"
 KERNEL_SRC_DIR="${KERNEL_SRC_DIR:-/build/usr/src/linux}"
 ROOT_OS_RELEASE="${ROOT_OS_RELEASE:-/root/etc/os-release}"
-NVIDIA_DRIVER_VERSION="${NVIDIA_DRIVER_VERSION:-410.78}"
+NVIDIA_DRIVER_VERSION="${NVIDIA_DRIVER_VERSION:-390.116}"
 NVIDIA_DRIVER_DOWNLOAD_URL_DEFAULT="https://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run"
 NVIDIA_DRIVER_DOWNLOAD_URL="${NVIDIA_DRIVER_DOWNLOAD_URL:-$NVIDIA_DRIVER_DOWNLOAD_URL_DEFAULT}"
 NVIDIA_INSTALL_DIR_HOST="${NVIDIA_INSTALL_DIR_HOST:-/opt/nvidia}"
@@ -122,7 +122,7 @@ download_kernel_src_archive() {
   pushd "${KERNEL_SRC_DIR}"
   local attempts=0
   until time curl -sfS "${download_url}" -o "${KERNEL_SRC_ARCHIVE}"; do
-    attempts=$(( ${attempts} + 1 ))
+    attempts=$(( attempts + 1 ))
     if (( "${attempts}" >= "${RETRY_COUNT}" )); then
       error "Could not download kernel sources from ${download_url}, giving up."
       return ${RETCODE_ERROR}
@@ -160,8 +160,10 @@ configure_kernel_src() {
   make modules_prepare
 
   # TODO: Figure out why the kernel magic version hack is required.
-  local kernel_version_uname="$(uname -r)"
-  local kernel_version_src="$(cat include/generated/utsrelease.h | awk '{ print $3 }' | tr -d '"')"
+  local kernel_version_uname
+  kernel_version_uname="$(uname -r)"
+  local kernel_version_src
+  kernel_version_src="$(cat include/generated/utsrelease.h | awk '{ print $3 }' | tr -d '"')"
   if [[ "${kernel_version_uname}" != "${kernel_version_src}" ]]; then
     info "Modifying kernel version magic string in source files"
     sed -i "s|${kernel_version_src}|${kernel_version_uname}|g" "include/generated/utsrelease.h"
@@ -202,7 +204,7 @@ configure_nvidia_installation_dirs() {
   update_container_ld_cache
 
   # Install an exit handler to cleanup the overlayfs mount points.
-  trap "{ umount /lib/modules/\"$(uname -r)\"/video; umount /usr/lib/x86_64-linux-gnu ; umount /usr/bin; }" EXIT
+  trap '{ umount /lib/modules/"$(uname -r)"/video; umount /usr/lib/x86_64-linux-gnu ; umount /usr/bin; }' EXIT
   popd
 }
 
@@ -217,10 +219,10 @@ run_nvidia_installer() {
   info "Running NVIDIA installer"
   # Load deps
   if ! grep -q -w ipmi_msghandler /proc/modules; then
-    insmod `find /root/lib/modules -iname ipmi_msghandler.ko`
+    insmod "$(find /root/lib/modules -iname ipmi_msghandler.ko)"
   fi
   if ! grep -q -w ipmi_devintf /proc/modules; then
-    insmod `find /root/lib/modules -iname ipmi_devintf.ko`
+    insmod "$(find /root/lib/modules -iname ipmi_devintf.ko)"
   fi
   pushd "${NVIDIA_INSTALL_DIR_CONTAINER}"
   IGNORE_MISSING_MODULE_SYMVERS=1 \
@@ -258,7 +260,7 @@ verify_nvidia_installation() {
 
 update_host_ld_cache() {
   info "Updating host's ld cache"
-  mkdir -p ${ROOT_MOUNT_DIR}/etc/ld.so.conf.d
+  mkdir -p "${ROOT_MOUNT_DIR}"/etc/ld.so.conf.d
   echo "${NVIDIA_INSTALL_DIR_HOST}/lib64" > "${ROOT_MOUNT_DIR}/etc/ld.so.conf.d/nvidia.conf"
   ldconfig -r "${ROOT_MOUNT_DIR}"
 }

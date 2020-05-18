@@ -1,7 +1,7 @@
 ---
 title: Preparing a Kubernetes cluster for the use of GPUs
 description: Here we explain how to make the GPU driver for CoreOS available so that workloads can use GPUs.
-date: 2020-03-30
+date: 2020-05-18
 type: page
 weight: 150
 tags: ["recipe"]
@@ -11,21 +11,29 @@ tags: ["recipe"]
 
 In order to have GPU instances running CoreOS we need to follow these steps to install and configure the right libraries and drivers on the host machine.
 
-## Install the Nvidia GPU drivers on the CoreOS instances
+## Installing
 
-The idea here it is run a pod in every worker node to download, compile and install the Nvidia drivers on CoreOS. It is a copy from [Shelman Group](https://github.com/shelmangroup/coreos-gpu-installer) but adding the pod security policy needed to work in hardened clusters.
-
+To install the chart locally:
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/giantswarm/kubernetes-gpu/master/manifests/drivers.yaml
+$ helm install helm/kubernetes-gpu-app
 ```
 
-It will create a daemon set which will run a bunch of different commands by node. At the end, it will display a succesful message in case there was not trouble found.
+Provide a custom `values`:
+```bash
+$ helm install helm/kubernetes-gpu-app -f values.yaml
+```
+
+## Nvidia GPU drivers 
+
+The idea here it is run a pod in every worker node to download, compile and install the Nvidia drivers on Flatcar/CoreOS. It is a fork from [Shelman Group](https://github.com/shelmangroup/coreos-gpu-installer) but adding the pod security policy needed to work in hardened clusters.
+
+It will create a daemon set which runs a bunch of different commands by node. At the end, it displays a successful message in case there is not trouble found.
 
 ```bash
 $ kubectl logs -f $(kubectl get pod -l app="nvidia-driver-installer" --no-headers | head -n 1 | awk '{print $1}') -c nvidia-driver-installer
 ...
 +-----------------------------------------------------------------------------+
-| NVIDIA-SMI 396.26                 Driver Version: 396.26                    |
+| NVIDIA-SMI 390.116                 Driver Version: 390.116                  |
 |-------------------------------+----------------------+----------------------+
 | GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
 | Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
@@ -48,10 +56,6 @@ Updating host's ld cache
 
 Instead of the official Nvidia device plugin, which requires a custom docker runtime, we choose to use Google's approach. In short, this device plugin expects that all the Nvidia libraries needed by the containers are present under a single directory on the host (`/opt/nvidia`). 
 
-```bash
-$ kubectl apply -f https://raw.githubusercontent.com/giantswarm/kubernetes-gpu/master/manifests/device-plugin-ds.yaml
-```
-
 Same as before we deploy a daemon set in the cluster which will mount the `/dev` host path and the `/var/lib/kubelet/device-plugin` path to make available the GPU device to pods that request it. Pointing out the we passed a flag to the container to indicate where the Nvidia libraries and binaries has been installed in our host.
 
 ```bash
@@ -69,6 +73,42 @@ falling back to v1beta1 API
 device-plugin registered with the kubelet
 device-plugin: ListAndWatch start
 ListAndWatch: send devices &ListAndWatchResponse{Devices:[&Device{ID:nvidia0,Health:Healthy,}],}
+```
+
+# Considerations
+
+Depend how your application make use of Nvidia driver you may need to mount the proper volume.
+
+```
+  volumes:
+  - name: nvidia-libs
+    hostPath:
+      path: /opt/nvidia/lib64
+      type: Directory```
+  containers:
+    ...
+    volumeMounts:
+    - mountPath: /opt/nvidia/lib64
+      name: nvidia-libs
+```
+
+Extend shared library to contain the nvidia directory
+```    env:
+    - name: LD_LIBRARY_PATH
+      value: $LD_LIBRARY_PATH:/opt/nvidia/lib64
+```
+
+Taking into account that default Pod Security Policy in the tenant clusters, `restricted`, does not
+allow mount host paths. You will need to extend:
+```
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: your-psp-name
+spec:
+  ...
+  volumes:
+  - hostPath
 ```
 
 # Verification

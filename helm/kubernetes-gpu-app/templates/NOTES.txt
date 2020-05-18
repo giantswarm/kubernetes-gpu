@@ -1,0 +1,3 @@
+Check that the driver and device plugin are up and running:
+
+    kubectl get ds -n {{ .Release.Namespace }}

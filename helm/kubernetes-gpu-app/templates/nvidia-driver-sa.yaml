@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nvidia-driver-installer
+  namespace: kube-system
+  labels:
+    {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}

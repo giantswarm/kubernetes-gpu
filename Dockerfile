@@ -15,6 +15,7 @@ FROM ubuntu:18.04
 RUN apt-get update && \
     apt-get install -y \
         bc \
+        time \
         bison \
         curl \
         flex \
@@ -26,7 +27,10 @@ RUN apt-get update && \
         perl-modules \
         xz-utils \
         && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* 
+
+ARG driver-version=390.116
+ENV NVIDIA_DRIVER_VERSION=$driver-version
 
 COPY entrypoint.sh /entrypoint.sh
 

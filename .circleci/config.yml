@@ -1,0 +1,46 @@
+version: 2.1
+orbs:
+  architect: giantswarm/architect@0.8.5
+
+workflows:
+
+  package-and-push-chart-on-tag:
+    jobs:
+      
+      # Ensure that for every commit (all branches), and for every new release tag,
+      # an image is pushed to Quay.
+      - architect/push-to-docker:
+          name: push-to-quay
+          image: "quay.io/giantswarm/aws-operator"
+          username_envar: "QUAY_USERNAME"
+          password_envar: "QUAY_PASSWORD"
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+
+      # Ensure that for every commit to master, and for every new release tag,
+      # an image gets pushed to the Aliyun registry.
+      - architect/push-to-docker:
+          name: push-to-aliyun
+          image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/aws-operator"
+          username_envar: "ALIYUN_USERNAME"
+          password_envar: "ALIYUN_PASSWORD"
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /^v.*/
+
+      - architect/push-to-app-catalog:
+          name: "package and push kubernetes-gpu chart"
+          app_catalog: "giantswarm-playground-catalog"
+          app_catalog_test: "giantswarm-playground-test-catalog"
+          chart: "kubernetes-gpu-app"
+          # Trigger job on git tag.
+          filters:
+            tags:
+              only: /^v.*/

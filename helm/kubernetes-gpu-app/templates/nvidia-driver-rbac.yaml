@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: nvidia-driver-installer
+  namespace: kube-system
+  labels:
+    {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}
+rules:
+- apiGroups:      ['policy','extensions']
+  resources:      ['podsecuritypolicies']
+  verbs:          ['use']
+  resourceNames:  ['privileged']
