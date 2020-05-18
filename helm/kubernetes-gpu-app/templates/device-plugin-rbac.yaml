@@ -1,0 +1,30 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: nvidia-gpu-device-plugin
+  namespace: kube-system
+  labels:
+    app: nvidia-gpu-device-plugin
+    giantswarm.io/service-type: "managed"
+rules:
+- apiGroups:      ['policy', 'extensions']
+  resources:      ['podsecuritypolicies']
+  verbs:          ['use']
+  resourceNames:  ['privileged']
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: nvidia-gpu-device-plugin
+  namespace: kube-system
+  labels:
+    app: nvidia-gpu-device-plugin
+    giantswarm.io/service-type: "managed"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nvidia-gpu-device-plugin
+subjects:
+- kind: ServiceAccount
+  name: nvidia-gpu-device-plugin
+  namespace: kube-system

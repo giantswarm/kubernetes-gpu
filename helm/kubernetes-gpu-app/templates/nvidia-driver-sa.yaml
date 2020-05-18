@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nvidia-driver-installer
+  namespace: kube-system
+  labels:
+    app: nvidia-driver-installer
+    giantswarm.io/service-type: "managed"

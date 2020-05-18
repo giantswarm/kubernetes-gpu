@@ -231,14 +231,6 @@ run_nvidia_installer() {
     --no-drm \
     --no-opengl-files \
     --silent
-  curl -o cuda_9.1.85_387.26_linux.run https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_387.26_linux
-  ls -l
-  chmod +x "${NVIDIA_INSTALL_DIR_CONTAINER}"/cuda_9.1.85_387.26_linux.run
-  sh "${NVIDIA_INSTALL_DIR_CONTAINER}"/cuda_9.1.85_387.26_linux.run \
-    --kernel-source-path="${KERNEL_SRC_DIR}" \
-    --no-drm \
-    --no-opengl-files \
-    --silent
   popd
 }
 
