@@ -7,10 +7,6 @@ workflows:
   package-and-push-chart-on-tag:
     jobs:
       
-      - build:
-          requires:
-            - build
-
       # Ensure that for every commit (all branches), and for every new release tag,
       # an image is pushed to Quay.
       - architect/push-to-docker:
@@ -48,13 +44,3 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-
-jobs:
-  build:
-    steps:
-      - checkout
-
-      - run:
-          name: Build image
-          command: |
-            make build 
