@@ -37,7 +37,7 @@ spec:
         hostPath:
           path: /dev
       containers:
-      - image: quay.io/giantswarm/nvidia-gpu-device-plugin:1.0.0
+      - image: {{ .Values.device.image.repository }}:{{ .Values.device.image.tag }}
         command: ["/usr/bin/nvidia-gpu-device-plugin", "-logtostderr"]
         name: nvidia-gpu-device-plugin
         resources:
