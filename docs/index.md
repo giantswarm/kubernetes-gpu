@@ -98,6 +98,19 @@ Extend shared library to contain the nvidia directory
       value: $LD_LIBRARY_PATH:/opt/nvidia/lib64
 ```
 
+Taking into account that default Pod Security Policy in the tenant clusters, `restricted`, does not
+allow mount host paths. You will need to extend:
+```
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: your-psp-name
+spec:
+  ...
+  volumes:
+  - hostPath
+```
+
 # Verification
 
 To run a test we are going to use a [cuda vecadd example](https://github.com/giantswarm/kubernetes-gpu/blob/master/demo-pod/vecadd.cu). It performs a simple vector addition using the device plugin installed before.
