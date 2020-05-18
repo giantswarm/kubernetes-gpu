@@ -8,7 +8,7 @@ help:
 	@echo '  push  	push docker --image-- '
 	@echo ''
 	@echo 'Extra arguments:'
-	@echo 'driver-version=:	make driver-version="390.116"'
+	@echo 'driver-version=:	make build driver-version="390.116"'
 
 build:
 	docker build --build-arg driver-version=$(driver-version) -t quay.io/giantswarm/coreos-nvidia-driver-installer:$(driver-version) .
