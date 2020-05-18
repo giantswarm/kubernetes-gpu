@@ -14,8 +14,6 @@ workflows:
           image: "quay.io/giantswarm/aws-operator"
           username_envar: "QUAY_USERNAME"
           password_envar: "QUAY_PASSWORD"
-          requires:
-            - build
           filters:
             tags:
               only: /^v.*/
@@ -27,8 +25,6 @@ workflows:
           image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/aws-operator"
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
-          requires:
-            - build
           filters:
             branches:
               only: master
