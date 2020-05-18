@@ -4,21 +4,18 @@ metadata:
   name: nvidia-gpu-device-plugin
   namespace: kube-system
   labels:
-    k8s-app: nvidia-gpu-device-plugin
-    giantswarm.io/service-type: "managed"
+    {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}
     addonmanager.kubernetes.io/mode: Reconcile
 spec:
   updateStrategy:
     type: RollingUpdate
   selector:
     matchLabels:
-      k8s-app: nvidia-gpu-device-plugin
-      giantswarm.io/service-type: "managed"
+      {{- include "kubernetes-gpu.metaLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        k8s-app: nvidia-gpu-device-plugin
-        giantswarm.io/service-type: "managed"
+        {{- include "kubernetes-gpu.metaLabels" . | nindent 8 }}
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:

@@ -4,18 +4,15 @@ metadata:
   name: nvidia-driver-installer
   namespace: kube-system
   labels:
-    app: nvidia-driver-installer
-    giantswarm.io/service-type: "managed"
+    {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: nvidia-driver-installer
-      giantswarm.io/service-type: "managed"
+      {{- include "kubernetes-gpu.metaLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: nvidia-driver-installer
-        giantswarm.io/service-type: "managed"
+        {{- include "kubernetes-gpu.metaLabels" . | nindent 8 }}
     spec:
       serviceAccount: nvidia-driver-installer
       serviceAccountName: nvidia-driver-installer

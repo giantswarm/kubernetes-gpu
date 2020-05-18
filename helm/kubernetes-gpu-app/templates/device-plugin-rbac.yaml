@@ -4,8 +4,7 @@ metadata:
   name: nvidia-gpu-device-plugin
   namespace: kube-system
   labels:
-    app: nvidia-gpu-device-plugin
-    giantswarm.io/service-type: "managed"
+    {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}
 rules:
 - apiGroups:      ['policy', 'extensions']
   resources:      ['podsecuritypolicies']
@@ -18,8 +17,7 @@ metadata:
   name: nvidia-gpu-device-plugin
   namespace: kube-system
   labels:
-    app: nvidia-gpu-device-plugin
-    giantswarm.io/service-type: "managed"
+    {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

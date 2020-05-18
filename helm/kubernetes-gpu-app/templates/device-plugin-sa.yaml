@@ -4,4 +4,4 @@ metadata:
   name: nvidia-gpu-device-plugin
   namespace: kube-system
   labels:
-    giantswarm.io/service-type: "managed"
+    {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}
