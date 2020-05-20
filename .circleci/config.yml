@@ -11,7 +11,7 @@ workflows:
       # an image is pushed to Quay.
       - architect/push-to-docker:
           name: push-to-quay
-          image: "quay.io/giantswarm/aws-operator"
+          image: "quay.io/giantswarm/coreos-nvidia-driver-installer"
           username_envar: "QUAY_USERNAME"
           password_envar: "QUAY_PASSWORD"
           filters:
@@ -22,7 +22,7 @@ workflows:
       # an image gets pushed to the Aliyun registry.
       - architect/push-to-docker:
           name: push-to-aliyun
-          image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/aws-operator"
+          image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/coreos-nvidia-driver-installer"
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
           filters:
