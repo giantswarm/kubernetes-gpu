@@ -37,7 +37,7 @@ workflows:
           app_catalog_test: "giantswarm-playground-test-catalog"
           chart: "kubernetes-gpu-app"
           requires:
-            - architect/push-to-docker
+            - "architect/push-to-docker"
           # Trigger job on git tag.
           filters:
             tags:
