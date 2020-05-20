@@ -1,3 +1,5 @@
+namespace: kube-system
+
 driver:
   image:
     repository: quay.io/giantswarm/coreos-nvidia-driver-installer
