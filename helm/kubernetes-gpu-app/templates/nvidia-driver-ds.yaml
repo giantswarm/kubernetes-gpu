@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: nvidia-driver-installer
-  namespace: kube-system
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}
 spec:
