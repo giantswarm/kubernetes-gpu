@@ -12,6 +12,7 @@ workflows:
       - architect/push-to-docker:
           name: push-to-quay
           image: "quay.io/giantswarm/coreos-nvidia-driver-installer"
+          image_tag: "440.33"
           username_envar: "QUAY_USERNAME"
           password_envar: "QUAY_PASSWORD"
           filters:
@@ -23,11 +24,10 @@ workflows:
       - architect/push-to-docker:
           name: push-to-aliyun
           image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/coreos-nvidia-driver-installer"
+          image_tag: "440.33"
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
           filters:
-            branches:
-              only: master
             tags:
               only: /^v.*/
 
@@ -36,6 +36,8 @@ workflows:
           app_catalog: "giantswarm-playground-catalog"
           app_catalog_test: "giantswarm-playground-test-catalog"
           chart: "kubernetes-gpu-app"
+          requires:
+            - architect/push-to-docker
           # Trigger job on git tag.
           filters:
             tags:

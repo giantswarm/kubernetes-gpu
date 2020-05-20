@@ -1,9 +1,7 @@
-
 driver:
   image:
     repository: quay.io/giantswarm/coreos-nvidia-driver-installer
-    tag: 390.116
-    
+    tag: '440.33'
 device:
   image:
     repository: quay.io/giantswarm/nvidia-gpu-device-plugin

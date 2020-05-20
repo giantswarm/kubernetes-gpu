@@ -29,6 +29,8 @@ RUN apt-get update && \
         && \
     rm -rf /var/lib/apt/lists/* 
 
+ENV NVIDIA_DRIVER_VERSION="440.33"
+
 COPY entrypoint.sh /entrypoint.sh
 
 RUN ["chmod", "+x", "/entrypoint.sh"]
