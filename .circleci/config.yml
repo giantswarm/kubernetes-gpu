@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  architect: giantswarm/architect@dev:custom_tag
+  architect: giantswarm/architect-orb@dev:custom_tag
 
 workflows:
 
