@@ -4,12 +4,6 @@ set -eu -o pipefail
 
 NEW_VERSION="${1:-440.33}"
 
-update_circleci() {
-  echo "Updating circleci"
-  sed -i.bak -E "s/(image_tag)(.+)/\1: \"$NEW_VERSION\"/" .circleci/config.yml
-  rm -f .circleci/config.yml.bak
-}
-
 update_default_chart_value() {
   echo "Updating default chart value"
   cat helm/kubernetes-gpu-app/values.yaml | yq --arg version $NEW_VERSION '.driver.image.tag=$version' -y > helm/kubernetes-gpu-app/values.yaml_new
@@ -29,7 +23,6 @@ update_dockerfile() {
 }
 
 main() {
-  update_circleci
   update_default_chart_value
   update_chart_app_version
   update_dockerfile

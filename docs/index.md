@@ -11,6 +11,10 @@ tags: ["recipe"]
 
 In order to have GPU instances running CoreOS we need to follow these steps to install and configure the right libraries and drivers on the host machine.
 
+## Requirements
+
+- Your cluster must have running GPU instances (`p2` or `p3` families in AWS).
+
 ## Installing
 
 To install the chart locally:
@@ -132,3 +136,24 @@ Doing CPU Vector add
 ```
 
 Now you have successfully installed everything needed to run GPU workloads over your Kubernetes cluster.
+
+## Development
+
+Once you want to add a new driver version please follow these steps:
+
+- Run update version script which replaces all driver version appearances with new value.
+
+`/update_driver_version.sh 440.33`
+
+- Make a PR to the repo and tag your commit with new version in order to trigger the CI build that creates the app chart in the catalog and the container image with the driver version tag.
+
+## Compatibility
+
+Tested on Giant Swarm releases:
+
+- `9.0.5` on AWS with Kubernetes `1.15.11`
+- `11.3.0` on AWS with Kubernetes `1.16.9`
+
+## Credit
+
+* https://github.com/shelmangroup/coreos-gpu-installer
