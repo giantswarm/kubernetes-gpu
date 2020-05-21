@@ -145,7 +145,14 @@ Once you want to add a new driver version please follow these steps:
 
 `/update_driver_version.sh 440.33`
 
-- Make a PR to the repo and tag your commit with new version in order to trigger the CI build that creates the app chart in the catalog and the container image with the driver version tag.
+- Make a PR to the repo and tag your commit following the semver. To align it with driver version which  has `X.Y` format (like `390.116`) let's add an extra `.0` so we follow our container image tag convention and let our automation to build the image properly.
+
+Example:
+
+```
+git tag -a "v440.33" -m "v440.33"
+git push --tags
+```
 
 ## Compatibility
 
