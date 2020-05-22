@@ -29,7 +29,7 @@ RUN apt-get update && \
         && \
     rm -rf /var/lib/apt/lists/* 
 
-ENV NVIDIA_DRIVER_VERSION="440.33"
+ENV NVIDIA_DRIVER_VERSION="440.64.00"
 
 COPY entrypoint.sh /entrypoint.sh
 

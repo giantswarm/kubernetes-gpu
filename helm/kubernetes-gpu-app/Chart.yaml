@@ -5,4 +5,4 @@ home: https://github.com/giantswarm/kubernetes-gpu-app
 sources:
 - https://github.com/giantswarm/kubernetes-gpu
 version: [[ .Version ]]
-appVersion: 440.33
+appVersion: 440.64.00

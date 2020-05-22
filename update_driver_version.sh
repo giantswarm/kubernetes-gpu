@@ -6,7 +6,7 @@ NEW_VERSION="${1:-440.33}"
 
 update_default_chart_value() {
   echo "Updating default chart value"
-  cat helm/kubernetes-gpu-app/values.yaml | yq --arg version "$NEW_VERSION.0" '.driver.image.tag=$version' -y > helm/kubernetes-gpu-app/values.yaml_new
+  cat helm/kubernetes-gpu-app/values.yaml | yq --arg version "$NEW_VERSION" '.driver.image.tag=$version' -y > helm/kubernetes-gpu-app/values.yaml_new
   mv helm/kubernetes-gpu-app/values.yaml_new helm/kubernetes-gpu-app/values.yaml
 }
 
