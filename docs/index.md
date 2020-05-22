@@ -27,6 +27,15 @@ Provide a custom `values`:
 $ helm install helm/kubernetes-gpu-app -f values.yaml
 ```
 
+## Configuration
+
+There are the different driver versions to choose:
+
+| Driver Version | Chart Version (X.Y.Z) | CUDA compatible Version|
+|--------|---------|------------|
+|440.82|440.82.00|10.2|
+|390.116|390.116.00|9.1|
+
 ## Nvidia GPU drivers 
 
 The idea here it is run a pod in every worker node to download, compile and install the Nvidia drivers on Flatcar/CoreOS. It is a fork from [Shelman Group](https://github.com/shelmangroup/coreos-gpu-installer) but adding the pod security policy needed to work in hardened clusters.
