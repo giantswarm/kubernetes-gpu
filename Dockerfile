@@ -29,7 +29,9 @@ RUN apt-get update && \
         && \
     rm -rf /var/lib/apt/lists/* 
 
-ENV NVIDIA_DRIVER_VERSION="440.64.00"
+ENV NVIDIA_DRIVER_VERSION="440.82"
+
+RUN curl -L -sS "http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run" -o "NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run"
 
 COPY entrypoint.sh /entrypoint.sh
 

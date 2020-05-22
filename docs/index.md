@@ -141,16 +141,18 @@ Now you have successfully installed everything needed to run GPU workloads over 
 
 Once you want to add a new driver version please follow these steps:
 
+- Check the latest driver versions in [official web](https://www.nvidia.com/en-us/drivers/unix/).
+
 - Run update version script which replaces all driver version appearances with new value.
 
-`/update_driver_version.sh 440.33`
+`/update_driver_version.sh 390.116`
 
 - Make a PR to the repo and tag your commit following the semver. To align it with driver version which  has `X.Y` format (like `390.116`) let's add an extra `.0` so we follow our container image tag convention and let our automation to build the image properly.
 
 Example:
 
 ```
-git tag -a "v440.33" -m "v440.33"
+git tag -a "390.116.00" -m "390.116.00"
 git push --tags
 ```
 
