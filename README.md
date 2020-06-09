@@ -7,7 +7,7 @@ It is a recipe to install the CUDA (GPU) drivers onto worker nodes with GPUs to 
 Users that want to run GPU workloads, e.g. for AI and similar use cases need to have special drivers (CUDA) installed on the GPU machines. This app makes sure those drivers are present and installed in the right version.
 
 **Who can use it?**
-Our customers on AWS that need to run GPU apps.
+Users on AWS that have GPU machines in their cluster and want to run GPU/CUDA workloads on them.
 
 **How to use it?**
 Install the app via the App Platform by selecting the desired version of the driver (CUDA version of your workloads).
