@@ -10,7 +10,7 @@ Users that want to run GPU workloads, e.g. for AI and similar use cases need to 
 Our customers on AWS that need to run GPU apps.
 
 **How to use it?**
-Install the app via App Platform by selecting the version of the driver desired (CUDA version of your apps).
+Install the app via the App Platform by selecting the desired version of the driver (CUDA version of your workloads).
 
 This repository's content is available in two forms:
 
