@@ -4,7 +4,7 @@
 It is a recipe to install the CUDA (GPU) drivers onto worker nodes with GPUs to let customers run GPU workloads.
 
 **Why did we add it?**
-So far, customers have needed to run it by themselves. We've had to sync all time every time there is a change. Now we can provide a new release when a new driver version is out (and tested) and they can easily install it.
+Users that want to run GPU workloads, e.g. for AI and similar use cases need to have special drivers (CUDA) installed on the GPU machines. This app makes sure those drivers are present and installed in the right version.
 
 **Who can use it?**
 Our customers on AWS that need to run GPU apps.
