@@ -29,7 +29,7 @@ RUN apt-get update && \
         && \
     rm -rf /var/lib/apt/lists/* 
 
-ENV NVIDIA_DRIVER_VERSION="450.57"
+ENV NVIDIA_DRIVER_VERSION="450.51"
 
 RUN curl -L -sS "http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run" -o "NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run"
 
