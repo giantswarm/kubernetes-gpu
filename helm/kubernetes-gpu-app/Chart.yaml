@@ -1,8 +1,8 @@
 apiVersion: v1
 name: kubernetes-gpu-app
 description: A Helm chart for Kubernetes
-home: https://github.com/giantswarm/kubernetes-gpu-app
+home: https://github.com/giantswarm/kubernetes-gpu
 sources:
 - https://github.com/giantswarm/kubernetes-gpu
-version: 1
+version: [[ .Version ]]
 appVersion: 390.116

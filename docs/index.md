@@ -11,6 +11,10 @@ tags: ["recipe"]
 
 In order to have GPU instances running CoreOS we need to follow these steps to install and configure the right libraries and drivers on the host machine.
 
+## Requirements
+
+- Your cluster must have running GPU instances (`p2` or `p3` families in AWS).
+
 ## Installing
 
 To install the chart locally:
@@ -22,6 +26,15 @@ Provide a custom `values`:
 ```bash
 $ helm install helm/kubernetes-gpu-app -f values.yaml
 ```
+
+## Configuration
+
+There are the different driver versions to choose:
+
+| Driver Version | Chart Version (X.Y.Z) | CUDA compatible Version|
+|--------|---------|------------|
+|440.82|440.82.00|10.2|
+|390.116|390.116.00|9.1|
 
 ## Nvidia GPU drivers 
 
@@ -132,3 +145,33 @@ Doing CPU Vector add
 ```
 
 Now you have successfully installed everything needed to run GPU workloads over your Kubernetes cluster.
+
+## Development
+
+Once you want to add a new driver version please follow these steps:
+
+- Check the latest driver versions in [official web](https://www.nvidia.com/en-us/drivers/unix/).
+
+- Run update version script which replaces all driver version appearances with new value.
+
+`/update_driver_version.sh 390.116`
+
+- Make a PR to the repo and tag your commit following the semver. To align it with driver version which  has `X.Y` format (like `390.116`) let's add an extra `.0` so we follow our container image tag convention and let our automation to build the image properly.
+
+Example:
+
+```
+git tag -a "390.116.00" -m "390.116.00"
+git push --tags
+```
+
+## Compatibility
+
+Tested on Giant Swarm releases:
+
+- `9.0.5` on AWS with Kubernetes `1.15.11`
+- `11.3.0` on AWS with Kubernetes `1.16.9`
+
+## Credit
+
+* https://github.com/shelmangroup/coreos-gpu-installer

@@ -22,12 +22,10 @@ KERNEL_SRC_URL="https://cdn.kernel.org/pub/linux/kernel/v4.x"
 KERNEL_SRC_ARCHIVE="linux-$(uname -r | cut -d- -f1).tar.xz"
 KERNEL_SRC_DIR="${KERNEL_SRC_DIR:-/build/usr/src/linux}"
 ROOT_OS_RELEASE="${ROOT_OS_RELEASE:-/root/etc/os-release}"
-NVIDIA_DRIVER_VERSION="${NVIDIA_DRIVER_VERSION:-390.116}"
-NVIDIA_DRIVER_DOWNLOAD_URL_DEFAULT="https://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run"
-NVIDIA_DRIVER_DOWNLOAD_URL="${NVIDIA_DRIVER_DOWNLOAD_URL:-$NVIDIA_DRIVER_DOWNLOAD_URL_DEFAULT}"
+NVIDIA_DRIVER_VERSION="${NVIDIA_DRIVER_VERSION}"
 NVIDIA_INSTALL_DIR_HOST="${NVIDIA_INSTALL_DIR_HOST:-/opt/nvidia}"
 NVIDIA_INSTALL_DIR_CONTAINER="${NVIDIA_INSTALL_DIR_CONTAINER:-/usr/local/nvidia}"
-NVIDIA_INSTALLER_RUNFILE="$(basename "${NVIDIA_DRIVER_DOWNLOAD_URL}")"
+NVIDIA_INSTALLER_RUNFILE="NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run"
 ROOT_MOUNT_DIR="${ROOT_MOUNT_DIR:-/root}"
 CACHE_FILE="${NVIDIA_INSTALL_DIR_CONTAINER}/.cache"
 set +x
@@ -208,13 +206,6 @@ configure_nvidia_installation_dirs() {
   popd
 }
 
-download_nvidia_installer() {
-  info "Downloading NVIDIA installer ... "
-  pushd "${NVIDIA_INSTALL_DIR_CONTAINER}"
-  curl -L -sS "${NVIDIA_DRIVER_DOWNLOAD_URL}" -o "${NVIDIA_INSTALLER_RUNFILE}"
-  popd
-}
-
 run_nvidia_installer() {
   info "Running NVIDIA installer"
   # Load deps
@@ -224,6 +215,7 @@ run_nvidia_installer() {
   if ! grep -q -w ipmi_devintf /proc/modules; then
     insmod "$(find /root/lib/modules -iname ipmi_devintf.ko)"
   fi
+  cp ./$NVIDIA_INSTALLER_RUNFILE $NVIDIA_INSTALL_DIR_CONTAINER
   pushd "${NVIDIA_INSTALL_DIR_CONTAINER}"
   IGNORE_MISSING_MODULE_SYMVERS=1 \
   sh "${NVIDIA_INSTALLER_RUNFILE}" \
@@ -275,7 +267,6 @@ main() {
     info "Did not find cached version, building the drivers..."
     download_kernel_src
     configure_nvidia_installation_dirs
-    download_nvidia_installer
     configure_kernel_src
     run_nvidia_installer
     update_cached_version
