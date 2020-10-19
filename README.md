@@ -16,3 +16,7 @@ This repository's content is available in two forms:
 
 - Embedded into the Recipes section in https://docs.giantswarm.io/guides/
 - As raw content in the `docs/` folder.
+
+### Attribution
+
+- App icon by [surang](https://www.flaticon.com/authors/surang) from [www.flaticon.com](https://www.flaticon.com/)

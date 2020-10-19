@@ -4,5 +4,6 @@ description: A Helm chart for Kubernetes
 home: https://github.com/giantswarm/kubernetes-gpu
 sources:
 - https://github.com/giantswarm/kubernetes-gpu
+icon: https://user-images.githubusercontent.com/273727/96249941-49187d80-0fae-11eb-8481-c0cff48bb9f4.png
 version: [[ .Version ]]
 appVersion: 440.82.2
