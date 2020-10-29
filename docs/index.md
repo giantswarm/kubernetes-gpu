@@ -129,7 +129,7 @@ spec:
 To run a test we are going to use a [cuda vecadd example](https://github.com/giantswarm/kubernetes-gpu/blob/master/demo-pod/vecadd.cu). It performs a simple vector addition using the device plugin installed before.
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/giantswarm/kubernetes-gpu/master/manifests/test-pod.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/giantswarm/kubernetes-gpu/master/demo-pod/test-pod.yaml
 ```
 
 If we inspect the logs, we should be able to see something like
