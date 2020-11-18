@@ -1,7 +1,7 @@
 ---
 title: Preparing a Kubernetes cluster for the use of GPUs
 description: Here we explain how to make the GPU driver for CoreOS available so that workloads can use GPUs.
-date: 2020-05-18
+date: 2020-11-18
 type: page
 weight: 150
 tags: ["recipe"]
@@ -9,27 +9,29 @@ tags: ["recipe"]
 
 # Preparing a Kubernetes cluster for the use of GPUs
 
-In order to have GPU instances running CoreOS we need to follow these steps to install and configure the right libraries and drivers on the host machine.
+In order to have GPU instances running Flatcar we need to follow these steps to install and configure the right libraries and drivers on the host machine.
 
 ## Requirements
 
-- Your cluster must have running GPU instances (`p2` or `p3` families in AWS).
+- Your cluster must have running GPU instances (`p2` or `p3` families in AWS, `NC` or `NCs` families on Azure).
+- Your cluster must be running a supported Giant Swarm release:
+  - `9.0.5` on AWS with Kubernetes `1.15.11`
+  - `11.3.0` on AWS with Kubernetes `1.16.9`
+  - `13.0.0` on Azure with kubernetes `1.18.12`
 
 ## Installing
 
-To install the chart locally:
+You need to install the `kubernetes-gpu-app` application, available in the `Giant Swarm Playground`.
+
+If you want to use `helm` directly, you can install the `kubernetes-gpu-app` chart directly: 
+
 ```bash
 $ helm install helm/kubernetes-gpu-app
 ```
 
-Provide a custom `values`:
-```bash
-$ helm install helm/kubernetes-gpu-app -f values.yaml
-```
-
 ## Configuration
 
-There are the different driver versions to choose:
+Based on the `CUDA` version you need, there are different driver versions to choose from:
 
 | Driver Version | Chart Version (X.Y.Z) | CUDA compatible Version|
 |--------|---------|------------|
@@ -42,8 +44,10 @@ The idea here it is run a pod in every worker node to download, compile and inst
 
 It will create a daemon set which runs a bunch of different commands by node. At the end, it displays a successful message in case there is not trouble found.
 
+selector: ``
+
 ```bash
-$ kubectl logs -f $(kubectl get pod -l app="nvidia-driver-installer" --no-headers | head -n 1 | awk '{print $1}') -c nvidia-driver-installer
+$ kubectl logs -f -l app.kubernetes.io/name=kubernetes-gpu-app -c nvidia-driver-installer
 ...
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 390.116                 Driver Version: 390.116                  |
@@ -72,7 +76,7 @@ Instead of the official Nvidia device plugin, which requires a custom docker run
 Same as before we deploy a daemon set in the cluster which will mount the `/dev` host path and the `/var/lib/kubelet/device-plugin` path to make available the GPU device to pods that request it. Pointing out the we passed a flag to the container to indicate where the Nvidia libraries and binaries has been installed in our host.
 
 ```bash
-$ kubectl logs -f $(kubectl get pod -l k8s-app="nvidia-gpu-device-plugin" --no-headers | head -n 1 | awk '{print $1}')
+$ kubectl logs -f -l app.kubernetes.io/name=kubernetes-gpu-app
 ```
 
 When everything has gone as expected you should see some logs like
@@ -129,7 +133,7 @@ spec:
 To run a test we are going to use a [cuda vecadd example](https://github.com/giantswarm/kubernetes-gpu/blob/master/demo-pod/vecadd.cu). It performs a simple vector addition using the device plugin installed before.
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/giantswarm/kubernetes-gpu/master/manifests/test-pod.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/giantswarm/kubernetes-gpu/master/demo-pod/test-pod.yaml
 ```
 
 If we inspect the logs, we should be able to see something like
@@ -164,13 +168,6 @@ Example:
 git tag -a "390.116.00" -m "390.116.00"
 git push --tags
 ```
-
-## Compatibility
-
-Tested on Giant Swarm releases:
-
-- `9.0.5` on AWS with Kubernetes `1.15.11`
-- `11.3.0` on AWS with Kubernetes `1.16.9`
 
 ## Credit
 
