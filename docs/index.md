@@ -4,11 +4,15 @@ description: Here we explain how to make the GPU driver for CoreOS available so 
 type: page
 weight: 150
 tags: ["recipe"]
+owner:
+  - https://github.com/orgs/giantswarm/teams/sig-customer-happiness
 ---
 
 # Preparing a Kubernetes cluster for the use of GPUs
 
 In order to have GPU instances running Flatcar we need to follow these steps to install and configure the right libraries and drivers on the host machine.
+
+{{< platform_support_table aws="ga=v9.0.5" azure="ga=v13.0.0" >}}
 
 ## Requirements
 
