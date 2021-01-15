@@ -12,6 +12,8 @@ owner:
 
 In order to have GPU instances running Flatcar we need to follow these steps to install and configure the right libraries and drivers on the host machine.
 
+{{< platform_support_table aws="ga=v9.0.5" azure="ga=v13.0.0" >}}
+
 ## Requirements
 
 - Your cluster must have running GPU instances (`p2` or `p3` families in AWS, `NC` or `NCs` families on Azure).
