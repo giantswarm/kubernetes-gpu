@@ -21,6 +21,9 @@ spec:
     spec:
       serviceAccount: nvidia-gpu-device-plugin
       serviceAccountName: nvidia-gpu-device-plugin
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{ .Values.nodeSelector | toYaml | nindent 8 }}
+      {{- end }}
       tolerations:
       - key: "node.kubernetes.io/master"
         effect: "NoSchedule"
