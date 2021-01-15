@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: nvidia-gpu-device-plugin
-  namespace: kube-system
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "kubernetes-gpu.metaLabels" . | nindent 4 }}
     addonmanager.kubernetes.io/mode: Reconcile
@@ -21,13 +21,14 @@ spec:
     spec:
       serviceAccount: nvidia-gpu-device-plugin
       serviceAccountName: nvidia-gpu-device-plugin
-      {{- if .Values.nodeSelector }}
-      nodeSelector: {{ .Values.nodeSelector | toYaml | nindent 8 }}
-      {{- end }}
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
       tolerations:
-      - key: "node.kubernetes.io/master"
-        effect: "NoSchedule"
-        operator: "Exists"
+{{ toYaml .Values.tolerations | indent 6 }}
+{{- end }}
       priorityClassName: system-node-critical
       volumes:
       - name: device-plugin
@@ -40,10 +41,10 @@ spec:
       - image: {{ .Values.device.image.repository }}:{{ .Values.device.image.tag }}
         command: ["/usr/bin/nvidia-gpu-device-plugin", "-logtostderr"]
         name: nvidia-gpu-device-plugin
+{{- if .Values.device.resources }}
         resources:
-          requests:
-            cpu: 50m
-            memory: 10Mi
+{{ toYaml .Values.device.resources | indent 10 }}
+{{- end }}
         securityContext:
           privileged: true
         volumeMounts:
