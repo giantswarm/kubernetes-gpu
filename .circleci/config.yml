@@ -1,12 +1,12 @@
 version: 2.1
 orbs:
-  architect: giantswarm/architect@2.1.0
+  architect: giantswarm/architect@2.2.0
 
 workflows:
 
   package-and-push-chart-on-tag:
     jobs:
-      
+
       # Ensure that for every commit (all branches), and for every new release tag,
       # an image is pushed to Quay.
       - architect/push-to-docker:
