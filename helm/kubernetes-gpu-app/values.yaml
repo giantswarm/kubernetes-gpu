@@ -26,4 +26,3 @@ device:
     requests:
       cpu: 50m
       memory: 10Mi
-      
