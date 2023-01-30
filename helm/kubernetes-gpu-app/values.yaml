@@ -14,7 +14,7 @@ nodeSelector: {}
 driver:
   image:
     repository: quay.io/giantswarm/coreos-nvidia-driver-installer
-    tag: 440.82.02
+    tag: 440.82.04
   resources:
     requests:
       cpu: 0.15
