@@ -35,10 +35,10 @@ workflows:
           name: "package and push kubernetes-gpu chart"
           app_catalog: "giantswarm-playground-catalog"
           app_catalog_test: "giantswarm-playground-test-catalog"
+          context: architect
           chart: "kubernetes-gpu-app"
           requires:
             - "push-to-quay"
-            - "push-to-aliyun"
           # Trigger job on git tag.
           filters:
             tags:
