@@ -12,6 +12,7 @@ workflows:
       - architect/push-to-docker:
           name: push-to-quay
           image: "quay.io/giantswarm/coreos-nvidia-driver-installer"
+          context: architect
           username_envar: "QUAY_USERNAME"
           password_envar: "QUAY_PASSWORD"
           filters:
@@ -23,6 +24,7 @@ workflows:
       - architect/push-to-docker:
           name: push-to-aliyun
           image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/coreos-nvidia-driver-installer"
+          context: architect
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
           filters:
