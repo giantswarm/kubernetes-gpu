@@ -19,7 +19,7 @@ set -u
 set -x
 
 KERNEL_SRC_URL="https://cdn.kernel.org/pub/linux/kernel/v$(uname -r | cut -d- -f1 | cut -d '.' -f 1).x"
-KERNEL_SRC_ARCHIVE="linux-$(uname -r | cut -d- -f1).tar.xz"
+KERNEL_SRC_ARCHIVE="linux-$(uname -r | cut -d- -f1 | sed 's/\.0$//').tar.xz"
 KERNEL_SRC_DIR="${KERNEL_SRC_DIR:-/build/usr/src/linux}"
 ROOT_OS_RELEASE="${ROOT_OS_RELEASE:-/root/etc/os-release}"
 NVIDIA_DRIVER_VERSION="${NVIDIA_DRIVER_VERSION}"

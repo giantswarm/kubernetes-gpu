@@ -1,4 +1,4 @@
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: nvidia-gpu-device-plugin
@@ -11,7 +11,7 @@ rules:
   verbs:          ['use']
   resourceNames:  ['privileged']
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: nvidia-gpu-device-plugin
