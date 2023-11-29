@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  architect: giantswarm/architect@4.27.0
+  architect: giantswarm/architect@4.35.5
 
 workflows:
 
@@ -9,28 +9,16 @@ workflows:
 
       # Ensure that for every commit (all branches), and for every new release tag,
       # an image is pushed to Quay.
-      - architect/push-to-docker:
-          name: push-to-quay
-          image: "quay.io/giantswarm/coreos-nvidia-driver-installer"
+      - architect/push-to-registries:
           context: architect
-          username_envar: "QUAY_USERNAME"
-          password_envar: "QUAY_PASSWORD"
+          name: push-to-registries
           filters:
             tags:
               only: /^v.*/
 
       # Ensure that for every commit to master, and for every new release tag,
       # an image gets pushed to the Aliyun registry.
-      - architect/push-to-docker:
-          name: push-to-aliyun
-          image: "giantswarm-registry.cn-shanghai.cr.aliyuncs.com/giantswarm/coreos-nvidia-driver-installer"
-          context: architect
-          username_envar: "ALIYUN_USERNAME"
-          password_envar: "ALIYUN_PASSWORD"
-          filters:
-            tags:
-              only: /^v.*/
-
+          image: giantswarm/coreos-nvidia-driver-installer
       - architect/push-to-app-catalog:
           name: "package and push kubernetes-gpu chart"
           app_catalog: "giantswarm-playground-catalog"
@@ -38,8 +26,7 @@ workflows:
           context: architect
           chart: "kubernetes-gpu-app"
           requires:
-            - "push-to-quay"
-          # Trigger job on git tag.
+            - push-to-registries
           filters:
             tags:
               only: /^v.*/
